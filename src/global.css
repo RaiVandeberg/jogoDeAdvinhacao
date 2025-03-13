@@ -15,7 +15,7 @@ body{
   /*  font-optical-sizing: auto;*/
 }
 
-input, button{
+input, button, LeetersUsed{
     font-family: "Noto Sans", sans-serif;
     /*font-optical-sizing: auto;*/
 }
