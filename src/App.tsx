@@ -1,7 +1,9 @@
 import styles from "./app.module.css";
 import { Header } from "./components/Header"
+import { Button } from "./components/Button";
 import { Tip } from "./components/Header/Tip";
 import { Letter } from "./components/Letter";
+import { Input } from "./components/input";
 
 export default function App() {
 
@@ -13,12 +15,20 @@ export default function App() {
       <main>
       <Header current={5} max={10} onRestart={handleRestartGame} />
       <Tip tip="Linguagem de Programação mais utilizadas" />
-      <div>
+
+      <div className={styles.word}>
       <Letter value="R"/>
       <Letter value="E"/>
       <Letter value="A"/>
       <Letter value="C"/>
       <Letter value="T"/>
+      </div>
+
+      <h4>Palpite</h4>
+
+      <div className={styles.guess}>
+      <Input autoFocus maxLength={1} placeholder="?"/>
+      <Button title="Confirmar"/>
       </div>
       </main>
     </div>
