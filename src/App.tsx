@@ -14,23 +14,36 @@ import { LeetersUsed, LeetersUsedProps } from "./components/LeetersUsed";
 
 export default function App() {
 const [score, setScore] = useState(0)
-const [ attempts, setAttempts ] = useState(0)
 const [ letter, setLetter] = useState("")
 const [leetersUsed, setLeetersUsed] = useState<LeetersUsedProps[]>([])
 const [ challenge, setChallenge] = useState<Challenge | null >(null)
 
+const ATTEMPTS_MARGIN = 3
+
+
   function handleRestartGame(){
-    alert("Reiniciando o jogo")
+    const isConfirmed = window.confirm("Deseja reiniciar o jogo?")
+    if(isConfirmed){
+      startGame()
+      setLeetersUsed([])
+
+    }else(!isConfirmed)
+    {
+      console.log("Reinício cancelado.")
+    }
+    
 
   }
 
   function startGame(){
     const index = Math.floor(Math.random() * WORDS.length)
     const randomWord = WORDS[index]
+
     setChallenge(randomWord)
 
-    setAttempts(0)
+    setScore(0)
     setLetter("")
+    setLeetersUsed([])
   }
 
   function handleConfirm(){
@@ -46,6 +59,7 @@ const [ challenge, setChallenge] = useState<Challenge | null >(null)
     const exists = leetersUsed.find((used) => used.value === value)
 
     if(exists){
+      setLetter("")
       return alert("Letra já utilizada " + value)
     }
 
@@ -63,9 +77,32 @@ const [ challenge, setChallenge] = useState<Challenge | null >(null)
     
   }
 
+  function endGame(message: string){
+    alert(message)
+    startGame()
+
+  }
+
   useEffect(() => {
     startGame()
   }, [])  
+  
+
+  useEffect(() => {
+    if(!challenge){
+      return
+    }
+
+    setTimeout(() => {
+      if(score === challenge.word.length){
+        return endGame ("Parabéns, você acertou a palavra")
+      }
+
+      const attemptsLimit = challenge.word.length + ATTEMPTS_MARGIN
+      if(leetersUsed.length === attemptsLimit){
+        return endGame("Você perdeu, tente novamente")}
+    }, 200)
+  }, [score, leetersUsed.length])
 
   if(!challenge){
     return
@@ -73,15 +110,20 @@ const [ challenge, setChallenge] = useState<Challenge | null >(null)
   return(
     <div className={styles.container} >
       <main>
-      <Header current={attempts} max={10} onRestart={handleRestartGame} />
+      <Header current={leetersUsed.length} max={challenge?.word.length + ATTEMPTS_MARGIN} onRestart={handleRestartGame} />
       <Tip tip={challenge.tip} />
 
       <div className={styles.word}>
-        {
-          challenge.word.split("").map((letter, index) => (
-            <Letter value="" />
-          )        
-        )}
+        {challenge.word.split("").map((letter, index) => {
+            const letterUsed = leetersUsed.find(
+              (used) => used.value.toUpperCase() === letter.toUpperCase()
+            )
+
+            return <Letter 
+            key={index} 
+            value={letterUsed?.value} 
+            color={letterUsed?.correct ? "correct" : "default" } />
+          })}
       
       
       </div>
