@@ -13,7 +13,7 @@ import { LeetersUsed, LeetersUsedProps } from "./components/LeetersUsed";
 
 
 export default function App() {
-
+const [score, setScore] = useState(0)
 const [ attempts, setAttempts ] = useState(0)
 const [ letter, setLetter] = useState("")
 const [leetersUsed, setLeetersUsed] = useState<LeetersUsedProps[]>([])
@@ -49,8 +49,15 @@ const [ challenge, setChallenge] = useState<Challenge | null >(null)
       return alert("Letra já utilizada " + value)
     }
 
+    const hits = challenge.word.toUpperCase().split("").filter((char) => char === value).length
+
+    const correct = hits > 0
+    const currentScore = score + hits
+
     setLeetersUsed((prevState) => [
-      ...prevState, { value, correct: false}])
+      ...prevState, { value, correct}])
+
+      setScore(currentScore)
       setLetter("")
 
     
@@ -67,7 +74,7 @@ const [ challenge, setChallenge] = useState<Challenge | null >(null)
     <div className={styles.container} >
       <main>
       <Header current={attempts} max={10} onRestart={handleRestartGame} />
-      <Tip tip="Linguagem de Programação mais utilizadas" />
+      <Tip tip={challenge.tip} />
 
       <div className={styles.word}>
         {
