@@ -55,4 +55,4 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 
 ---
 
-Feito com ❤️ por [Seu Nome](https://github.com/RaiVandeberg)
+Feito com ❤️ por [Raí Vandenberg](https://github.com/RaiVandeberg)
