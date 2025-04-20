@@ -17,6 +17,7 @@ const [score, setScore] = useState(0)
 const [ letter, setLetter] = useState("")
 const [leetersUsed, setLeetersUsed] = useState<LeetersUsedProps[]>([])
 const [ challenge, setChallenge] = useState<Challenge | null >(null)
+const [shake , setShake] = useState(false)
 
 const ATTEMPTS_MARGIN = 3
 
@@ -74,6 +75,13 @@ const ATTEMPTS_MARGIN = 3
       setScore(currentScore)
       setLetter("")
 
+      if(!correct){
+        setShake(true)
+        setTimeout(() => {
+          setShake(false)
+        }, 300)
+      }
+
     
   }
 
@@ -113,7 +121,7 @@ const ATTEMPTS_MARGIN = 3
       <Header current={leetersUsed.length} max={challenge?.word.length + ATTEMPTS_MARGIN} onRestart={handleRestartGame} />
       <Tip tip={challenge.tip} />
 
-      <div className={styles.word}>
+      <div className={`${styles.word} ${shake && styles.shake}`}>
         {challenge.word.split("").map((letter, index) => {
             const letterUsed = leetersUsed.find(
               (used) => used.value.toUpperCase() === letter.toUpperCase()
